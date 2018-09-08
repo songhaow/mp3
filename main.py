@@ -156,7 +156,7 @@ def process_songs():
 
     all_song_keys=get_all_song_keys()
 
-    for filename in args.sources:
+    for filename in all_song_kays:
         beat_list=calculate_song_beats(filename, params = args)
         bpm = calculate_song_bpm(filename, params = args)
         # print("{:6s} {:s}".format("{:2f}".format(bpm),f))
