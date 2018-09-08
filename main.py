@@ -1,4 +1,4 @@
-"""This module is a script that processes AWS songs to find bpm / beats, etc
+"""This module is a script that processes mp3 songs in a directory to find bpm / beats, etc
 """
 #! /usr/bin/env python
 import sys
@@ -6,17 +6,9 @@ from aubio import source, tempo
 from numpy import median, diff
 import os
 
+# ---------------------------------------
 def get_all_song_keys():
-    """Connect to AWS and find all songs in a storage location (in AWS, this is
-    called a bucket). Get all the song storage location names and return them
-    in a list.
-    :return: example -
-      [
-        'songhaow-test-123/fb752f5e-e8f1-4b8a-b114-4fd3d1c937d7',
-        'songhaow-test-123/some-other-hash-key',
-        ...
-      ]
-    """
+
     allfiles=os.listdir()
     print ("allfiles: ", allfiles)
     all_song_kays=[]
@@ -35,11 +27,9 @@ def get_all_song_keys():
 
     return all_song_kays
 
+# -----------------------------------------
 def calculate_song_bpm(path, params=None):
- # def calculate_song_bpm(song_fp):
- #    """Call the functions you wrote in bpmndbeats.py to find the song's bpm and
- #    then return that value.
- #    """
+
     if params is None:
         params = {}
     # default:
@@ -95,15 +85,8 @@ def calculate_song_bpm(path, params=None):
     # print "beats-in-bpm: ", beats
     return beats_to_bpm(beats, path)
 
-fh1=open("BeatsMusic.txt", "w")
-fh1.write('{ "The Music of": ')
-
 # ///////////////////////////////////////
 def calculate_song_beats(path, params=None):
- # def calculate_song_beats(song_fp):
- #    """Call the functions you wrote in bpmndbeats.py to calculate the song's
- #    beats
- #    """
   win_s = 512                 # fft size
   hop_s = win_s // 2          # hop size
   filename=path
@@ -115,8 +98,7 @@ def calculate_song_beats(path, params=None):
   delay = 4. * hop_s
     # list of beats, in samples
   beats = []
-  beats01=[]
-  fh1.write(filename)
+
   fh1.write(",")
   fh1.write("\n")
   fh1.write('"beat_list": [')
@@ -127,40 +109,25 @@ def calculate_song_beats(path, params=None):
       if is_beat:
         this_beat = int(total_frames - delay + is_beat[0] * hop_s)
         beats.append(this_beat)
-        # beats01.append(this_beat / float(samplerate))
-        # print("%6.1f" % (this_beat / float(samplerate)))
         fh1.write("%6.1f" % (this_beat / float(samplerate)))
       total_frames += read
       if read < hop_s: break
 
   return 0.0
 
-# Try to write beats into a file at once
-# import numpy as np
-# np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
-# # np.set_printoptions(precision=3)
-# print beats01
-# fh1.write("beats: ", beats01)
-# return []  # empty list of beats
-# if __name__ == '__main__':
+# -----------------------------------------------------
 def process_songs():
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-m', '--mode', help="mode [default|fast|super-fast]", dest="mode")
-    """
-    when you type : python demo_bpm_extract.py -m fast
-    add_arguent will put the word "fast" under the "mode" keyu in your dictionary
-    """
-    parser.add_argument('sources', nargs='*', help="input_files")
-    args = parser.parse_args()
 
     all_song_keys=get_all_song_keys()
 
     for filename in all_song_kays:
+        song_key=filename.split(".")[0]
+        song_key=song_key+".txt"
+        fh1=open(song_key, "w")
+        fh1.write('{ "The Music of": ', filename)
         beat_list=calculate_song_beats(filename, params = args)
         bpm = calculate_song_bpm(filename, params = args)
         # print("{:6s} {:s}".format("{:2f}".format(bpm),f))
-        print ("source file: ",filename)
         print (("The bpm is: %7.1f.") %bpm)
         fh1.write("]")
         fh1.write(",")
@@ -171,13 +138,6 @@ def process_songs():
 
 if __name__ == '__main__':
     process_songs()
-
-# fh1.write("]")
-# fh1.write(",")
-# fh1.write("\n")
-# fh1.write(('"bpm": %i') %bpm)
-# fh1.write("}")
-# fh1.close()
 
 # def process_songs():
 #     """This is the main function for looping through all the songs you find in
