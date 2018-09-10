@@ -1,17 +1,17 @@
 """This module is a script that processes mp3 songs in a directory to find bpm / beats, etc
 """
 #! /usr/bin/env python
-import sys
+import sys, os
 from aubio import source, tempo
 from numpy import median, diff
-import os
 
+all_song_kays=[]
 # ---------------------------------------
 def get_all_song_keys():
 
-    allfiles=os.listdir()
+    allfiles=os.listdir(".") # need undstand path better such as: /songhaow-test-123/
     print ("allfiles: ", allfiles)
-    all_song_kays=[]
+    # all_song_kays=[]
 
     for filename in allfiles:
         name=filename.split(".")[0]
@@ -98,10 +98,7 @@ def calculate_song_beats(path, params=None):
   delay = 4. * hop_s
     # list of beats, in samples
   beats = []
-
-  fh1.write(",")
-  fh1.write("\n")
-  fh1.write('"beat_list": [')
+  beats01=[]
 
   while True:
       samples, read = s()
@@ -109,11 +106,12 @@ def calculate_song_beats(path, params=None):
       if is_beat:
         this_beat = int(total_frames - delay + is_beat[0] * hop_s)
         beats.append(this_beat)
-        fh1.write("%6.1f" % (this_beat / float(samplerate)))
+        beats01.append(this_beat / float(samplerate))
+        # fh1.write("%6.1f" % (this_beat / float(samplerate)))
       total_frames += read
       if read < hop_s: break
 
-  return 0.0
+  return beats01
 
 # -----------------------------------------------------
 def process_songs():
@@ -124,9 +122,16 @@ def process_songs():
         song_key=filename.split(".")[0]
         song_key=song_key+".txt"
         fh1=open(song_key, "w")
-        fh1.write('{ "The Music of": ', filename)
-        beat_list=calculate_song_beats(filename, params = args)
-        bpm = calculate_song_bpm(filename, params = args)
+        fh1.write("{ filename: ")
+        fh1.write(filename)
+        beat_list=calculate_song_beats(filename, params = None)
+        fh1.write(",")
+        fh1.write("\n")
+        fh1.write('"beat_list": [')
+        for beat in beat_list:
+          fh1.write(str(beat))
+          fh1.write("\n")
+        bpm = calculate_song_bpm(filename, params = None)
         # print("{:6s} {:s}".format("{:2f}".format(bpm),f))
         print (("The bpm is: %7.1f.") %bpm)
         fh1.write("]")
