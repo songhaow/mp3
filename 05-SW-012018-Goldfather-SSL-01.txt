@@ -1,4 +1,4 @@
-{ filename: 05-SW-012018-Goldfather-SSL-01.mp3,
+{ beat_file: 05-SW-012018-Goldfather-SSL-01.txt,
 "beat_list": [1.7942403628117913
 2.20281179138322
 2.611337868480726

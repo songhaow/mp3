@@ -1,4 +1,4 @@
-{ filename: No6-SW.mp3,
+{ beat_file: No6-SW.txt,
 "beat_list": [2.031292517006803
 2.346575963718821
 2.661814058956916

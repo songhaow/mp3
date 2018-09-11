@@ -86,7 +86,7 @@ def calculate_song_bpm(path, params=None):
     return beats_to_bpm(beats, path)
 
 # ///////////////////////////////////////
-def calculate_song_beats(path, params=None):
+def calculate_song_beats(path):
   win_s = 512                 # fft size
   hop_s = win_s // 2          # hop size
   filename=path
@@ -96,7 +96,8 @@ def calculate_song_beats(path, params=None):
   samplerate = s.samplerate
   o = tempo("default", win_s, hop_s, samplerate)
   delay = 4. * hop_s
-    # list of beats, in samples
+
+# list of beats
   beats = []
   beats01=[]
 
@@ -107,7 +108,6 @@ def calculate_song_beats(path, params=None):
         this_beat = int(total_frames - delay + is_beat[0] * hop_s)
         beats.append(this_beat)
         beats01.append(this_beat / float(samplerate))
-        # fh1.write("%6.1f" % (this_beat / float(samplerate)))
       total_frames += read
       if read < hop_s: break
 
@@ -118,22 +118,22 @@ def process_songs():
 
     all_song_keys=get_all_song_keys()
 
-    for filename in all_song_kays:
-        song_key=filename.split(".")[0]
-        song_key=song_key+".txt"
-        fh1=open(song_key, "w")
-        fh1.write("{ filename: ")
-        fh1.write(filename)
-        beat_list=calculate_song_beats(filename, params = None)
+    for song_key in all_song_kays:
+        name=song_key.split(".")[0]
+        beat_key=name+".txt"
+        fh1=open(beat_key, "w")
+        fh1.write("{ beat_file: ")
+        fh1.write(beat_key)
+        beat_list=calculate_song_beats(song_key)
         fh1.write(",")
         fh1.write("\n")
         fh1.write('"beat_list": [')
         for beat in beat_list:
           fh1.write(str(beat))
           fh1.write("\n")
-        bpm = calculate_song_bpm(filename, params = None)
+        bpm = calculate_song_bpm(song_key, params = None)
         # print("{:6s} {:s}".format("{:2f}".format(bpm),f))
-        print (("The bpm is: %7.1f.") %bpm)
+        # print (("The bpm is: %7.1f.") %bpm)
         fh1.write("]")
         fh1.write(",")
         fh1.write("\n")

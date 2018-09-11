@@ -1,4 +1,4 @@
-{ filename: 07-Littlewhiteboat.mp3,
+{ beat_file: 07-Littlewhiteboat.txt,
 "beat_list": [1.9385487528344671
 2.4526077097505667
 2.916235827664399

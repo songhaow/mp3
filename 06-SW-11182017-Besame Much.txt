@@ -1,4 +1,4 @@
-{ filename: 06-SW-11182017-Besame Much.mp3,
+{ beat_file: 06-SW-11182017-Besame Much.txt,
 "beat_list": [2.1198185941043084
 2.424172335600907
 2.728480725623583

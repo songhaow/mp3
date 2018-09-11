@@ -1,4 +1,4 @@
-{ filename: 10-Lvjiang波尔卡.mp3,
+{ beat_file: 10-Lvjiang波尔卡.txt,
 "beat_list": [2.7323356009070294
 3.158185941043084
 3.5238095238095237
