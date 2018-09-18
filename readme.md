@@ -1,6 +1,8 @@
 run:
 python main.py
-you get beat list and bpm for each music file.
+1) Download all files from AWS Bucket 'songhaow-test' store them in the local directory; 
+2) process bpm & beats and write into txt files into local directory;
+3) Prints all keys for the txt files, Tried to upload but did not work.
 
 run:
 python get_all_song_keys.py
