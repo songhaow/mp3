@@ -166,6 +166,7 @@ def process_songs():
        beat_key=name+".txt"
        print (beat_key)
        # s3.upload_file(beat_key, BUCKET_NAME, beat_key)
+       s3.Bucket(BUCKET_NAME).upload_file(beat_key, beat_key)
 
 if __name__ == '__main__':
     process_songs()
