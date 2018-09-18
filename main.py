@@ -1,6 +1,8 @@
 """This module is a script that processes mp3 songs in a directory to find bpm / beats, etc
 """
 #! /usr/bin/env python
+import boto3
+import botocore
 import sys, os
 from aubio import source, tempo
 from numpy import median, diff
@@ -116,9 +118,26 @@ def calculate_song_beats(path):
 # -----------------------------------------------------
 def process_songs():
 
-    all_song_keys=get_all_song_keys()
+  s3 = boto3.resource('s3')
+  s3_client = boto3.client('s3')
 
-    for song_key in all_song_kays:
+  #download all files from AWS S3 into local directory
+  BUCKET_NAME='songhaow-test'
+  response01=s3_client.list_objects_v2(Bucket=BUCKET_NAME)
+  print('The list of mp3 files: ')
+  for  Iresponse01 in response01:
+    if Iresponse01=="Contents":
+        dict=response01[Iresponse01]
+        for item in dict:
+            imp3=item['Key']
+            print(imp3)
+            s3.Bucket(BUCKET_NAME).download_file(imp3, imp3)
+
+    #filt and get all mp3 files in local directory
+  all_song_keys=get_all_song_keys()
+
+    #process every mp3 and store the .txt file locally
+  for song_key in all_song_kays:
         name=song_key.split(".")[0]
         beat_key=name+".txt"
         fh1=open(beat_key, "w")
@@ -140,6 +159,13 @@ def process_songs():
         fh1.write(('"bpm": %i') %bpm)
         fh1.write("}")
         fh1.close()
+
+    #upload all txt files to AWS S3
+  for song_key in all_song_kays:
+       name=song_key.split(".")[0]
+       beat_key=name+".txt"
+       print (beat_key)
+       # s3.upload_file(beat_key, BUCKET_NAME, beat_key)
 
 if __name__ == '__main__':
     process_songs()
