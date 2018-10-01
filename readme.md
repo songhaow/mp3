@@ -1,3 +1,8 @@
+# Overview
+
+Program to process songs and upload meta info
+
+# How to run
 run:
 python main.py
 1) Download all files from AWS Bucket 'songhaow-test' store them in the local directory; 
@@ -9,3 +14,5 @@ python get_all_song_keys.py
 you get all keys for the music files.
 
 The formulations in beats_list and bpm calculations are from the source codes of aubio. The logic and the results need to be verified. 
+
+
