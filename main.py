@@ -9,11 +9,13 @@ import typing
 from aubio import source, tempo
 from numpy import median, diff
 
+DATA_FOLDER = 'data'
+# todo: all_song_kays is a global variable - should not be
 all_song_kays=[]
 # ---------------------------------------
 def get_all_song_keys():
 
-    allfiles=os.listdir(".") # need undstand path better such as: /songhaow-test-123/
+    allfiles=os.listdir(DATA_FOLDER) # need undstand path better such as: /songhaow-test-123/
     print ("allfiles: ", allfiles)
     # all_song_kays=[]
 
@@ -33,6 +35,7 @@ def get_all_song_keys():
 
 # -----------------------------------------
 def calculate_song_bpm(path: str, params: typing.Dict=None):
+    path = f'{DATA_FOLDER}/{path}'
 
     if params is None:
         params = {}
@@ -90,7 +93,12 @@ def calculate_song_bpm(path: str, params: typing.Dict=None):
     return beats_to_bpm(beats, path)
 
 # ///////////////////////////////////////
+<<<<<<< HEAD
 def calculate_song_beats(path: str):
+=======
+def calculate_song_beats(path):
+  path = f'{DATA_FOLDER}/{path}'
+>>>>>>> move file into data/ folder
   win_s = 512                 # fft size
   hop_s = win_s // 2          # hop size
   filename=path
@@ -132,17 +140,20 @@ def process_songs():
         dict=response01[Iresponse01]
         for item in dict:
             imp3=item['Key']
-            print(imp3)
-            s3.Bucket(BUCKET_NAME).download_file(imp3, imp3)
+            save_file_path = f'{DATA_FOLDER}/{imp3}'
+            print(f'downloading to {save_file_path}')
+            s3.Bucket(BUCKET_NAME).download_file(imp3, save_file_path)
 
     #filt and get all mp3 files in local directory
   all_song_keys=get_all_song_keys()
+  print(f'all kays: {all_song_kays}')
 
     #process every mp3 and store the .txt file locally
   for song_key in all_song_kays:
         name=song_key.split(".")[0]
         beat_key=name+".txt"
-        fh1=open(beat_key, "w")
+        beat_key_fname = f'{DATA_FOLDER}/{beat_key}'
+        fh1=open(beat_key_fname, "w")
         fh1.write("{ beat_file: ")
         fh1.write(beat_key)
         beat_list=calculate_song_beats(song_key)
@@ -166,9 +177,9 @@ def process_songs():
   for song_key in all_song_kays:
        name=song_key.split(".")[0]
        beat_key=name+".txt"
-       print (beat_key)
+       beat_key_fname = f'{DATA_FOLDER}/{beat_key}'
        # s3.upload_file(beat_key, BUCKET_NAME, beat_key)
-       s3.Bucket(BUCKET_NAME).upload_file(beat_key, beat_key)
+       s3.Bucket(BUCKET_NAME).upload_file(beat_key_fname, beat_key)
 
 if __name__ == '__main__':
     process_songs()

@@ -1,6 +1,7 @@
-# Git ignore file is a file where you can add things that git should track 
-# for changes. This way if you have a lot of txt or mp3 files in your 
+# Git ignore file is a file where you can add things that git should track
+# for changes. This way if you have a lot of txt or mp3 files in your
 # project, they do not get added
 
 .git/
 .mypy_cache/
+data/
