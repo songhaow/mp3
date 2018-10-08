@@ -4,6 +4,8 @@
 import boto3
 import botocore
 import sys, os
+import typing
+
 from aubio import source, tempo
 from numpy import median, diff
 
@@ -30,7 +32,7 @@ def get_all_song_keys():
     return all_song_kays
 
 # -----------------------------------------
-def calculate_song_bpm(path, params=None):
+def calculate_song_bpm(path: str, params: typing.Dict=None):
 
     if params is None:
         params = {}
@@ -88,7 +90,7 @@ def calculate_song_bpm(path, params=None):
     return beats_to_bpm(beats, path)
 
 # ///////////////////////////////////////
-def calculate_song_beats(path):
+def calculate_song_beats(path: str):
   win_s = 512                 # fft size
   hop_s = win_s // 2          # hop size
   filename=path
