@@ -12,8 +12,8 @@ from numpy import median, diff
 DATA_FOLDER = 'data'
 
 # ---------------------------------------
-def get_all_song_keys(all_song_keys):
-
+def get_all_song_keys():
+    all_song_keys = []
     allfiles=os.listdir(DATA_FOLDER) # need undstand path better such as: /songhaow-test-123/
     print ("allfiles: ", allfiles)
 
@@ -23,9 +23,8 @@ def get_all_song_keys(all_song_keys):
         if(sufname=="mp3"):
           thismp3=name+".mp3"
           all_song_keys.append(thismp3)
-        else: pass
 
-    return
+    return all_song_keys
 # -----------------------------------------
 def calculate_song_bpm(path: str, params: typing.Dict=None):
     path = f'{DATA_FOLDER}/{path}'
@@ -136,8 +135,7 @@ def process_songs():
 
  # beat_key=name+".txt"
     #filt and get all mp3 files in local directory
-  all_song_keys=[]
-  get_all_song_keys(all_song_keys)
+  all_song_keys = get_all_song_keys()
   print(f'all kays: {all_song_keys}')
 
 #process every mp3 and store the .txt file locally
